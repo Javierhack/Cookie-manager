@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 let tab = null, pageUrl = null, cookies = [], editing = null;
 
-// ---------- utilidades ----------
+
 function toast(msg) {
   const t = $('toast');
   t.textContent = msg;
@@ -30,7 +30,7 @@ function fmtExpiry(c) {
   return c.session ? 'Sesión' : new Date(c.expirationDate * 1000).toLocaleString();
 }
 
-// ---------- carga ----------
+
 async function init() {
   [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   try {
@@ -61,7 +61,7 @@ function showEmpty(msg) {
   $('count').textContent = '';
 }
 
-// ---------- lista ----------
+
 function chip(text, on) {
   const s = document.createElement('span');
   s.className = 'chip' + (on ? ' on' : '');
@@ -138,7 +138,7 @@ async function copyText(text, msg) {
   }
 }
 
-// ---------- acciones ----------
+
 async function removeCookie(c) {
   await chrome.cookies.remove({ url: cookieUrl(c), name: c.name, storeId: c.storeId });
   toast('Cookie borrada');
@@ -163,7 +163,7 @@ $('btn-export').addEventListener('click', () => {
 
 $('search').addEventListener('input', render);
 
-// ---------- editor ----------
+
 function openEditor(c) {
   editing = c || null;
   $('edit-title').textContent = c ? 'Editar cookie' : 'Nueva cookie';
@@ -193,8 +193,8 @@ function normExpiry(v) {
   let n = typeof v === 'number' ? v : Number(v);
   if (Number.isNaN(n)) n = Date.parse(v) / 1000;
   if (Number.isNaN(n)) throw new Error('fecha de expiración no válida');
-  if (n <= 0) return null; // -1 o 0 = cookie de sesión en varias herramientas
-  if (n > 1e12) n = n / 1000; // venía en milisegundos
+  if (n <= 0) return null; 
+  if (n > 1e12) n = n / 1000; 
   return n;
 }
 
@@ -208,7 +208,7 @@ async function saveCookie(spec) {
   if (sameSite === 'no_restriction' && !secure) throw new Error('SameSite None requiere Secure');
   if (name.startsWith('__Host-')) {
     if (!secure) throw new Error('las cookies __Host- requieren Secure');
-    domain = domain.replace(/^\./, ''); // __Host- no admite dominio con punto
+    domain = domain.replace(/^\./, '');
     path = '/';
   } else if (name.startsWith('__Secure-') && !secure) {
     throw new Error('las cookies __Secure- requieren Secure');
@@ -230,7 +230,7 @@ async function saveCookie(spec) {
     httpOnly: !!spec.httpOnly,
     sameSite
   };
-  if (domain.startsWith('.')) details.domain = domain; // sin punto = cookie solo de ese host
+  if (domain.startsWith('.')) details.domain = domain;
   if (exp) details.expirationDate = exp;
 
   const res = await chrome.cookies.set(details);
@@ -260,7 +260,7 @@ $('form-edit').addEventListener('submit', async (e) => {
     return;
   }
   try {
-    // Si cambió la identidad de la cookie (nombre, dominio o ruta), se borra la anterior.
+   
     if (editing && (editing.name !== spec.name || editing.domain !== spec.domain || editing.path !== spec.path)) {
       await chrome.cookies.remove({ url: cookieUrl(editing), name: editing.name, storeId: editing.storeId });
     }
@@ -274,7 +274,7 @@ $('form-edit').addEventListener('submit', async (e) => {
   }
 });
 
-// ---------- importar ----------
+
 $('btn-import').addEventListener('click', () => {
   $('import-text').value = '';
   $('import-error').hidden = true;
@@ -329,7 +329,7 @@ $('form-import').addEventListener('submit', async (e) => {
     const shown = errors.slice(0, 6).join('\n');
     err.textContent = `${ok} importadas, ${errors.length} con error:\n${shown}` + (errors.length > 6 ? '\n…' : '');
     err.hidden = false;
-    return; // el diálogo queda abierto para que veas los motivos
+    return; 
   }
   $('dlg-import').close();
   toast(`Importadas: ${ok}` + (skipped.length ? ` · ${skipped.length} omitidas por expiradas` : '') + (otherSite ? ` · ${otherSite} son de otro dominio y no salen en esta lista` : ''));
