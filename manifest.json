@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Mi Editor de Cookies",
+  "version": "1.0.0",
+  "description": "Ver, crear, editar, eliminar, exportar e importar las cookies del sitio actual.",
+  "permissions": [
+    "cookies",
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Editor de cookies",
+    "default_icon": {
+      "16": "icon/icon16.png",
+      "32": "icon/icon32.png",
+      "48": "icon/icon48.png",
+      "128": "icon/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon/icon16.png",
+    "32": "icon/icon32.png",
+    "48": "icon/icon48.png",
+    "128": "icon/icon128.png"
+  }
+}

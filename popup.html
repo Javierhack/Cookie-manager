@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editor de cookies</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="site" id="site">—</div>
+    <div class="count" id="count"></div>
+  </header>
+
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Buscar cookie…" autocomplete="off">
+  </div>
+
+  <main id="list"></main>
+  <div id="empty" class="empty" hidden></div>
+
+  <footer>
+    <button id="btn-export">Exportar</button>
+    <button id="btn-import">Importar</button>
+    <span class="spacer"></span>
+    <button id="btn-clear" class="danger">Borrar todas</button>
+  </footer>
+
+  <!-- Editor -->
+  <dialog id="dlg-edit">
+    <form id="form-edit" method="dialog">
+      <h2 id="edit-title">Editar cookie</h2>
+      <label>Nombre <input id="f-name" required></label>
+      <label>Valor <textarea id="f-value" rows="3"></textarea></label>
+      <div class="row">
+        <label>Dominio <input id="f-domain"></label>
+        <label>Ruta <input id="f-path" value="/"></label>
+      </div>
+      <div class="row">
+        <label>Expira
+          <input id="f-expires" type="datetime-local">
+        </label>
+        <label>SameSite
+          <select id="f-samesite">
+            <option value="unspecified">No especificado</option>
+            <option value="lax">Lax</option>
+            <option value="strict">Strict</option>
+            <option value="no_restriction">None</option>
+          </select>
+        </label>
+      </div>
+      <p class="hint">Deja «Expira» vacío para una cookie de sesión. Un dominio que empieza con punto aplica también a los subdominios.</p>
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="f-secure"> Secure</label>
+        <label class="check"><input type="checkbox" id="f-httponly"> HttpOnly</label>
+      </div>
+      <div class="error" id="edit-error" hidden></div>
+      <div class="actions">
+        <button type="button" id="edit-cancel">Cancelar</button>
+        <button type="submit" class="primary">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Importar -->
+  <dialog id="dlg-import">
+    <form id="form-import" method="dialog">
+      <h2>Importar cookies</h2>
+      <p class="hint">Pega una lista JSON de cookies (el mismo formato que genera «Exportar»). Se aplicarán al sitio actual.</p>
+      <textarea id="import-text" rows="9" spellcheck="false" placeholder='[{"name":"...","value":"..."}]'></textarea>
+      <div class="error" id="import-error" hidden></div>
+      <div class="actions">
+        <button type="button" id="import-cancel">Cancelar</button>
+        <button type="submit" class="primary">Importar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
